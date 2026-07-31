@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block title %}
+    CreativeConnect | Find Creative Collaborators
+{% endblock %}
+
+{% block content %}
+<section class="hero-section">
+    <div class="container py-5">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-7">
+                <span class="badge text-bg-primary mb-3">
+                    Creative community
+                </span>
+
+                <h1 class="display-4 fw-bold">
+                    Find people to bring your creative ideas to life.
+                </h1>
+
+                <p class="lead text-secondary my-4">
+                    Connect with actors, filmmakers, musicians,
+                    photographers, editors, writers and independent
+                    creative organisations.
+                </p>
+
+                <div class="d-flex flex-wrap gap-3">
+                    {% if user.is_authenticated %}
+                        <a
+                            href="#"
+                            class="btn btn-primary btn-lg"
+                        >
+                            Browse projects
+                        </a>
+
+                        <a
+                            href="#"
+                            class="btn btn-outline-dark btn-lg"
+                        >
+                            View creatives
+                        </a>
+                    {% else %}
+                        <a
+                            href="{% url 'register' %}"
+                            class="btn btn-primary btn-lg"
+                        >
+                            Create an account
+                        </a>
+
+                        <a
+                            href="{% url 'login' %}"
+                            class="btn btn-outline-dark btn-lg"
+                        >
+                            Log in
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="col-lg-5">
+                <div class="card hero-card shadow-lg">
+                    <div class="card-body p-5">
+                        <h2 class="h3 mb-4">
+                            Collaborate locally
+                        </h2>
+
+                        <div class="mb-4">
+                            <h3 class="h5">Create a profile</h3>
+                            <p class="text-secondary mb-0">
+                                Show your skills, creative area,
+                                experience and portfolio.
+                            </p>
+                        </div>
+
+                        <div class="mb-4">
+                            <h3 class="h5">Post opportunities</h3>
+                            <p class="text-secondary mb-0">
+                                Find actors, editors, musicians and
+                                other collaborators for your project.
+                            </p>
+                        </div>
+
+                        <div>
+                            <h3 class="h5">Build your network</h3>
+                            <p class="text-secondary mb-0">
+                                Apply to projects and communicate with
+                                people working on creative ideas.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-white py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">
+                One community, many creative roles
+            </h2>
+
+            <p class="text-secondary">
+                CreativeConnect supports independent and amateur projects.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <article class="card feature-card shadow-sm">
+                    <div class="card-body p-4">
+                        <h3 class="h4">
+                            For creatives
+                        </h3>
+
+                        <p class="text-secondary mb-0">
+                            Present your experience and discover
+                            projects that need your skills.
+                        </p>
+                    </div>
+                </article>
+            </div>
+
+            <div class="col-md-4">
+                <article class="card feature-card shadow-sm">
+                    <div class="card-body p-4">
+                        <h3 class="h4">
+                            For project owners
+                        </h3>
+
+                        <p class="text-secondary mb-0">
+                            Post opportunities and review applications
+                            from interested collaborators.
+                        </p>
+                    </div>
+                </article>
+            </div>
+
+            <div class="col-md-4">
+                <article class="card feature-card shadow-sm">
+                    <div class="card-body p-4">
+                        <h3 class="h4">
+                            For communities
+                        </h3>
+
+                        <p class="text-secondary mb-0">
+                            Form small teams for films, theatre,
+                            photography, music and community events.
+                        </p>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
