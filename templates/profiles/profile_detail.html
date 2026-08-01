@@ -9,25 +9,39 @@
     <div class="card shadow-sm border-0 overflow-hidden">
         <div class="row g-0">
             <div class="col-md-4">
-                {% if profile.profile_image %}
-                    <img
-                        src="{{ profile.profile_image.url }}"
-                        alt="{{ profile.display_name }}"
-                        class="w-100 h-100 object-fit-cover"
-                        style="min-height: 420px;"
-                    >
-                {% else %}
-                    <div
-                        class="bg-secondary-subtle d-flex
-                               align-items-center justify-content-center"
-                        style="min-height: 420px;"
-                    >
-                        <span class="text-secondary">
-                            No profile image
-                        </span>
-                    </div>
-                {% endif %}
-            </div>
+    {% if profile.profile_image %}
+        <img
+            src="{{ profile.profile_image.url }}"
+            alt="{{ profile.display_name }}"
+            class="w-100 h-100 object-fit-cover"
+            style="min-height: 420px;"
+            onerror="
+                this.style.display='none';
+                this.nextElementSibling.style.display='flex';
+            "
+        >
+
+        <div
+            class="bg-secondary-subtle align-items-center
+                   justify-content-center"
+            style="min-height: 420px; display: none;"
+        >
+            <span class="text-secondary">
+                Profile image unavailable
+            </span>
+        </div>
+    {% else %}
+        <div
+            class="bg-secondary-subtle d-flex
+                   align-items-center justify-content-center"
+            style="min-height: 420px;"
+        >
+            <span class="text-secondary">
+                No profile image
+            </span>
+        </div>
+    {% endif %}
+</div>
 
             <div class="col-md-8">
                 <div class="card-body p-4 p-md-5">
