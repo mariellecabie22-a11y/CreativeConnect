@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ project.title }} | CreativeConnect
+{% endblock %}
+
+{% block content %}
+<section class="container py-5">
+    <article class="card border-0 shadow-sm">
+        <div class="card-body p-4 p-md-5">
+            <div
+                class="d-flex flex-wrap justify-content-between
+                       align-items-start gap-3"
+            >
+                <div>
+                    <span
+                        class="badge
+                        {% if project.status == 'open' %}
+                            text-bg-success
+                        {% else %}
+                            text-bg-secondary
+                        {% endif %}"
+                    >
+                        {{ project.get_status_display }}
+                    </span>
+
+                    <h1 class="display-6 fw-bold mt-3">
+                        {{ project.title }}
+                    </h1>
+
+                    <p class="text-secondary">
+                        Posted by {{ project.owner.username }}
+                    </p>
+                </div>
+
+                {% if user == project.owner %}
+                    <div class="d-flex gap-2">
+                        <a
+                            href="{% url 'project-edit' project.pk %}"
+                            class="btn btn-outline-primary"
+                        >
+                            Edit
+                        </a>
+
+                        <a
+                            href="{% url 'project-delete' project.pk %}"
+                            class="btn btn-outline-danger"
+                        >
+                            Delete
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+
+            <dl class="row mt-4">
+                <dt class="col-sm-3">
+                    Category
+                </dt>
+
+                <dd class="col-sm-9">
+                    {{ project.category }}
+                </dd>
+
+                <dt class="col-sm-3">
+                    Location
+                </dt>
+
+                <dd class="col-sm-9">
+                    {{ project.location }}
+                </dd>
+
+                <dt class="col-sm-3">
+                    Deadline
+                </dt>
+
+                <dd class="col-sm-9">
+                    {{ project.deadline|date:"j F Y" }}
+                </dd>
+            </dl>
+
+            <h2 class="h4 mt-4">
+                Project description
+            </h2>
+
+            <div class="text-secondary">
+                {{ project.description|linebreaks }}
+            </div>
+
+            <div class="mt-4">
+    {% if user == project.owner %}
+        <a
+            href="{% url 'project-applications' project.pk %}"
+            class="btn btn-primary"
+        >
+            View applications
+            ({{ project.applications.count }})
+        </a>
+    {% elif user.is_authenticated and project.status == "open" %}
+        <a
+            href="{% url 'application-create' project.pk %}"
+            class="btn btn-primary"
+        >
+            Apply to project
+        </a>
+    {% elif not user.is_authenticated %}
+        <a
+            href="{% url 'login' %}?next={{ request.path }}"
+            class="btn btn-primary"
+        >
+            Log in to apply
+        </a>
+    {% endif %}
+</div>
+</div>
+</article>
+</section>
+{% endblock %}

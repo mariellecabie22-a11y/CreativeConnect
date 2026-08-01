@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Apply to {{ project.title }} | CreativeConnect
+{% endblock %}
+
+{% block content %}
+<section class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4 p-md-5">
+                    <h1 class="h2">
+                        Apply to {{ project.title }}
+                    </h1>
+
+                    <p class="text-secondary mb-4">
+                        Posted by {{ project.owner.username }}
+                    </p>
+
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <div class="mb-4">
+                            <label
+                                for="{{ form.cover_letter.id_for_label }}"
+                                class="form-label"
+                            >
+                                Application message
+                            </label>
+
+                            {{ form.cover_letter }}
+
+                            {% for error in form.cover_letter.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                        >
+                            Submit application
+                        </button>
+
+                        <a
+                            href="{% url 'project-detail' project.pk %}"
+                            class="btn btn-outline-secondary"
+                        >
+                            Cancel
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

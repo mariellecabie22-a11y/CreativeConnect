@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ profile.display_name }} | CreativeConnect
+{% endblock %}
+
+{% block content %}
+<section class="container py-5">
+    <div class="card shadow-sm border-0 overflow-hidden">
+        <div class="row g-0">
+            <div class="col-md-4">
+                {% if profile.profile_image %}
+                    <img
+                        src="{{ profile.profile_image.url }}"
+                        alt="{{ profile.display_name }}"
+                        class="w-100 h-100 object-fit-cover"
+                        style="min-height: 420px;"
+                    >
+                {% else %}
+                    <div
+                        class="bg-secondary-subtle d-flex
+                               align-items-center justify-content-center"
+                        style="min-height: 420px;"
+                    >
+                        <span class="text-secondary">
+                            No profile image
+                        </span>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-8">
+                <div class="card-body p-4 p-md-5">
+                    <span class="badge text-bg-primary mb-3">
+                        {{ profile.get_creative_type_display }}
+                    </span>
+
+                    <h1 class="display-6 fw-bold">
+                        {{ profile.display_name }}
+                    </h1>
+
+                    <p class="text-secondary">
+                        @{{ profile.user.username }}
+                    </p>
+
+                    <dl class="row mt-4">
+                        <dt class="col-sm-4">
+                            Location
+                        </dt>
+
+                        <dd class="col-sm-8">
+                            {{ profile.location }}
+                        </dd>
+
+                        <dt class="col-sm-4">
+                            Experience
+                        </dt>
+
+                        <dd class="col-sm-8">
+                            {{ profile.get_experience_level_display }}
+                        </dd>
+
+                        <dt class="col-sm-4">
+                            Availability
+                        </dt>
+
+                        <dd class="col-sm-8">
+                            {% if profile.available_for_projects %}
+                                Available for projects
+                            {% else %}
+                                Not currently available
+                            {% endif %}
+                        </dd>
+                    </dl>
+
+                    <h2 class="h4 mt-4">
+                        About
+                    </h2>
+
+                    <div class="text-secondary">
+                        {{ profile.bio|linebreaks }}
+                    </div>
+
+                    {% if profile.portfolio_url %}
+                        <a
+                            href="{{ profile.portfolio_url }}"
+                            class="btn btn-outline-primary mt-3"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            View portfolio
+                        </a>
+                    {% endif %}
+
+                    {% if user == profile.user %}
+                        <a
+                            href="{% url 'profile-edit' %}"
+                            class="btn btn-primary mt-3"
+                        >
+                            Edit profile
+                        </a>
+                    {% endif %}
+
+                    {% if user.is_authenticated and user != profile.user %}
+                        <a
+                            href="{% url 'message-create-to-user' profile.user.username %}"
+                            class="btn btn-primary mt-3"
+                        >
+                            Send message
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

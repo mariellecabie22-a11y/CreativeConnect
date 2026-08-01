@@ -30,14 +30,50 @@
 </head>
 
 <body class="bg-light">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a
-                class="navbar-brand fw-bold"
-                href="{% url 'home' %}"
-            >
-                CreativeConnect
-            </a>
+    <nav class="navbar navbar-dark bg-dark shadow-sm">
+    <div class="container flex-wrap">
+        <a
+            class="navbar-brand fw-bold"
+            href="{% url 'home' %}"
+        >
+            CreativeConnect
+        </a>
+
+        <div class="d-flex align-items-center ms-auto">
+            {% if user.is_authenticated %}
+                <span class="navbar-text text-white me-3 d-none d-sm-inline">
+                    Hello, {{ user.username }}
+                </span>
+
+                <form
+                    method="post"
+                    action="{% url 'logout' %}"
+                    class="me-2"
+                >
+                    {% csrf_token %}
+
+                    <button
+                        class="btn btn-outline-light btn-sm"
+                        type="submit"
+                    >
+                        Log out
+                    </button>
+                </form>
+            {% else %}
+                <a
+                    href="{% url 'login' %}"
+                    class="btn btn-outline-light btn-sm me-2"
+                >
+                    Log in
+                </a>
+
+                <a
+                    href="{% url 'register' %}"
+                    class="btn btn-primary btn-sm me-2"
+                >
+                    Join
+                </a>
+            {% endif %}
 
             <button
                 class="navbar-toggler"
@@ -50,88 +86,83 @@
             >
                 <span class="navbar-toggler-icon"></span>
             </button>
-
-            <div
-                class="collapse navbar-collapse"
-                id="mainNavigation"
-            >
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a
-                            class="nav-link"
-                            href="#"
-                        >
-                            Browse creatives
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a
-                            class="nav-link"
-                            href="#"
-                        >
-                            Browse projects
-                        </a>
-                    </li>
-
-                    {% if user.is_authenticated %}
-                        <li class="nav-item">
-                            <a
-                                class="nav-link"
-                                href="#"
-                            >
-                                Create project
-                            </a>
-                        </li>
-                    {% endif %}
-                </ul>
-
-                <ul class="navbar-nav ms-auto align-items-lg-center">
-                    {% if user.is_authenticated %}
-                        <li class="nav-item">
-                            <span class="navbar-text me-lg-3">
-                                Hello, {{ user.username }}
-                            </span>
-                        </li>
-
-                        <li class="nav-item">
-                            <form
-                                method="post"
-                                action="{% url 'logout' %}"
-                            >
-                                {% csrf_token %}
-
-                                <button
-                                    class="btn btn-outline-light"
-                                    type="submit"
-                                >
-                                    Log out
-                                </button>
-                            </form>
-                        </li>
-                    {% else %}
-                        <li class="nav-item me-lg-2">
-                            <a
-                                class="nav-link"
-                                href="{% url 'login' %}"
-                            >
-                                Log in
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a
-                                class="btn btn-primary"
-                                href="{% url 'register' %}"
-                            >
-                                Join now
-                            </a>
-                        </li>
-                    {% endif %}
-                </ul>
-            </div>
         </div>
-    </nav>
+
+        <div
+            class="collapse navbar-collapse w-100"
+            id="mainNavigation"
+        >
+            <ul class="navbar-nav pt-3">
+                <li class="nav-item">
+                    <a
+                        class="nav-link"
+                        href="{% url 'profile-list' %}"
+                    >
+                        Browse creatives
+                    </a>
+                </li>
+
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        {% if user.creative_profile %}
+                            <a
+                                class="nav-link"
+                                href="{% url 'profile-detail' user.username %}"
+                            >
+                                My profile
+                            </a>
+                        {% else %}
+                            <a
+                                class="nav-link"
+                                href="{% url 'profile-create' %}"
+                            >
+                                Create profile
+                            </a>
+                        {% endif %}
+                    </li>
+                {% endif %}
+
+                <li class="nav-item">
+                    <a
+                        class="nav-link"
+                        href="{% url 'project-list' %}"
+                    >
+                        Browse projects
+                    </a>
+                </li>
+
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a
+                            class="nav-link"
+                            href="{% url 'project-create' %}"
+                        >
+                            Create project
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a
+                            class="nav-link"
+                            href="{% url 'my-applications' %}"
+                        >
+                            My applications
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a
+                            class="nav-link"
+                            href="{% url 'inbox' %}"
+                        >
+                            Messages
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
 
     <main>
         {% if messages %}
@@ -141,6 +172,7 @@
                         class="alert alert-{{ message.tags|default:'info' }}
                                alert-dismissible fade show"
                         role="alert"
+                        data-auto-dismiss="true"
                     >
                         {{ message }}
 
@@ -170,6 +202,8 @@
     <script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
     ></script>
+
+    <script src="{% static 'js/app.js' %}"></script>
 
     {% block javascript %}
     {% endblock %}

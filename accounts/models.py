@@ -5,4 +5,4 @@ class User(AbstractUser):
     """Custom user model for CreativeConnect."""
 
     def __str__(self):
-        return self.usernames
+        return self.username

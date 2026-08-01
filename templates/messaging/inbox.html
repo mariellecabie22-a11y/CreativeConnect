@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Inbox | CreativeConnect
+{% endblock %}
+
+{% block content %}
+<section class="container py-5">
+    <div
+        class="d-flex flex-wrap justify-content-between
+               align-items-center gap-3 mb-4"
+    >
+        <div>
+            <h1 class="fw-bold mb-1">
+                Inbox
+            </h1>
+
+            <p class="text-secondary mb-0">
+                Messages sent to you by other creatives.
+            </p>
+        </div>
+
+        <div class="d-flex gap-2">
+            <a
+                href="{% url 'sent-messages' %}"
+                class="btn btn-outline-secondary"
+            >
+                Sent messages
+            </a>
+
+            <a
+                href="{% url 'message-create' %}"
+                class="btn btn-primary"
+            >
+                New message
+            </a>
+        </div>
+    </div>
+
+    <div class="list-group shadow-sm">
+        {% for message in received_messages %}
+            <a
+                href="{% url 'message-detail' message.pk %}"
+                class="list-group-item list-group-item-action p-4
+                       {% if not message.is_read %}fw-bold{% endif %}"
+            >
+                <div
+                    class="d-flex justify-content-between
+                           align-items-start gap-3"
+                >
+                    <div>
+                        <h2 class="h5 mb-1">
+                            {{ message.subject }}
+                        </h2>
+
+                        <p class="mb-1">
+                            From {{ message.sender.username }}
+                        </p>
+
+                        <p class="text-secondary mb-0">
+                            {{ message.content|truncatewords:18 }}
+                        </p>
+                    </div>
+
+                    <div class="text-end">
+                        {% if not message.is_read %}
+                            <span class="badge text-bg-primary">
+                                New
+                            </span>
+                        {% endif %}
+
+                        <small class="d-block text-secondary mt-2">
+                            {{ message.created_at|date:"j M Y, H:i" }}
+                        </small>
+                    </div>
+                </div>
+            </a>
+        {% empty %}
+            <div class="list-group-item p-4">
+                You do not have any messages yet.
+            </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

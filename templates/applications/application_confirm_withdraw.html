@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Withdraw Application | CreativeConnect
+{% endblock %}
+
+{% block content %}
+<section class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4 p-md-5">
+                    <h1 class="h2">
+                        Withdraw application
+                    </h1>
+
+                    <p>
+                        Are you sure you want to withdraw your
+                        application for
+                        <strong>{{ application.project.title }}</strong>?
+                    </p>
+
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <button
+                            type="submit"
+                            class="btn btn-danger"
+                        >
+                            Withdraw
+                        </button>
+
+                        <a
+                            href="{% url 'application-detail' application.pk %}"
+                            class="btn btn-outline-secondary"
+                        >
+                            Cancel
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Conversation with {{ other_user.username }} | CreativeConnect
+{% endblock %}
+
+{% block content %}
+<section class="container py-5">
+    <div
+        class="d-flex flex-wrap justify-content-between
+               align-items-center gap-3 mb-4"
+    >
+        <div>
+            <h1 class="fw-bold mb-1">
+                Conversation with {{ other_user.username }}
+            </h1>
+        </div>
+
+        <a
+            href="{% url 'message-create-to-user' other_user.username %}"
+            class="btn btn-primary"
+        >
+            Send new message
+        </a>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+            {% for message in conversation_messages %}
+                <div
+                    class="mb-4 p-3 rounded
+                    {% if message.sender == user %}
+                        bg-primary-subtle ms-md-5
+                    {% else %}
+                        bg-secondary-subtle me-md-5
+                    {% endif %}"
+                >
+                    <div
+                        class="d-flex justify-content-between
+                               align-items-center gap-3 mb-2"
+                    >
+                        <strong>
+                            {{ message.sender.username }}
+                        </strong>
+
+                        <small class="text-secondary">
+                            {{ message.created_at|date:"j M Y, H:i" }}
+                        </small>
+                    </div>
+
+                    <h2 class="h6">
+                        {{ message.subject }}
+                    </h2>
+
+                    <div>
+                        {{ message.content|linebreaks }}
+                    </div>
+                </div>
+            {% empty %}
+                <p class="mb-0">
+                    No messages in this conversation.
+                </p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

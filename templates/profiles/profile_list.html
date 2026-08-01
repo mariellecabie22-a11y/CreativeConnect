@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Browse Creatives | CreativeConnect
+{% endblock %}
+
+{% block content %}
+<section class="container py-5">
+    <div
+        class="d-flex flex-wrap justify-content-between
+               align-items-center gap-3 mb-4"
+    >
+        <div>
+            <h1 class="fw-bold mb-1">
+                Browse creatives
+            </h1>
+
+            <p class="text-secondary mb-0">
+                Find people available for creative projects.
+            </p>
+        </div>
+
+        {% if user.is_authenticated %}
+            {% if user.creative_profile %}
+                <a
+                    href="{% url 'profile-detail' user.username %}"
+                    class="btn btn-outline-primary"
+                >
+                    View my profile
+                </a>
+            {% else %}
+                <a
+                    href="{% url 'profile-create' %}"
+                    class="btn btn-primary"
+                >
+                    Create profile
+                </a>
+            {% endif %}
+        {% endif %}
+    </div>
+
+    <form
+        method="get"
+        class="card card-body border-0 shadow-sm mb-4"
+    >
+        <div class="row g-3">
+            <div class="col-md-5">
+                <label
+                    for="type"
+                    class="form-label"
+                >
+                    Creative type
+                </label>
+
+                <select
+                    name="type"
+                    id="type"
+                    class="form-select"
+                >
+                    <option value="">
+                        All creative types
+                    </option>
+
+                    {% for value, label in creative_types %}
+                        <option
+                            value="{{ value }}"
+                            {% if selected_type == value %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ label }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-5">
+                <label
+                    for="location"
+                    class="form-label"
+                >
+                    Location
+                </label>
+
+                <input
+                    type="search"
+                    name="location"
+                    id="location"
+                    class="form-control"
+                    value="{{ location_query }}"
+                    placeholder="Search location"
+                >
+            </div>
+
+            <div class="col-md-2 d-flex align-items-end">
+                <button
+                    type="submit"
+                    class="btn btn-dark w-100"
+                >
+                    Search
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <div class="row g-4">
+        {% for profile in profiles %}
+            <div class="col-md-6 col-lg-4">
+                <article class="card h-100 border-0 shadow-sm">
+                    {% if profile.profile_image %}
+                        <img
+                            src="{{ profile.profile_image.url }}"
+                            alt="{{ profile.display_name }}"
+                            class="card-img-top"
+                            style="height: 260px; object-fit: cover;"
+                        >
+                    {% else %}
+                        <div
+                            class="bg-secondary-subtle d-flex
+                                   align-items-center justify-content-center"
+                            style="height: 260px;"
+                        >
+                            <span class="text-secondary">
+                                No image
+                            </span>
+                        </div>
+                    {% endif %}
+
+                    <div class="card-body">
+                        <span class="badge text-bg-primary mb-2">
+                            {{ profile.get_creative_type_display }}
+                        </span>
+
+                        <h2 class="h4">
+                            {{ profile.display_name }}
+                        </h2>
+
+                        <p class="text-secondary mb-2">
+                            {{ profile.location }}
+                        </p>
+
+                        <p>
+                            {{ profile.bio|truncatewords:20 }}
+                        </p>
+                    </div>
+
+                    <div class="card-footer bg-white border-0 pb-4">
+                        <a
+                            href="{% url 'profile-detail' profile.user.username %}"
+                            class="btn btn-outline-primary"
+                        >
+                            View profile
+                        </a>
+                    </div>
+                </article>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    No matching creative profiles were found.
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

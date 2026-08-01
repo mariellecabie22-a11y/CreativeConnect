@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Applications for {{ project.title }} | CreativeConnect
+{% endblock %}
+
+{% block content %}
+<section class="container py-5">
+    <div class="mb-4">
+        <h1 class="fw-bold">
+            Applications for {{ project.title }}
+        </h1>
+
+        <a
+            href="{% url 'project-detail' project.pk %}"
+            class="btn btn-outline-secondary"
+        >
+            Back to project
+        </a>
+    </div>
+
+    <div class="row g-4">
+        {% for application in applications %}
+            <div class="col-lg-6">
+                <article class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <span
+                            class="badge
+                            {% if application.status == 'accepted' %}
+                                text-bg-success
+                            {% elif application.status == 'rejected' %}
+                                text-bg-danger
+                            {% else %}
+                                text-bg-warning
+                            {% endif %}"
+                        >
+                            {{ application.get_status_display }}
+                        </span>
+
+                        <h2 class="h4 mt-3">
+                            {{ application.applicant.username }}
+                        </h2>
+
+                        <p>
+                            {{ application.cover_letter|linebreaks }}
+                        </p>
+
+                        <a
+                            href="{% url 'profile-detail' application.applicant.username %}"
+                            class="btn btn-outline-primary"
+                        >
+                            View profile
+                        </a>
+                    </div>
+
+                    {% if application.status == "pending" %}
+                        <div class="card-footer bg-white border-0 pb-4">
+                            <div class="d-flex gap-2">
+                                <form
+                                    method="post"
+                                    action="{% url 'application-update-status' application.pk 'accepted' %}"
+                                >
+                                    {% csrf_token %}
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-success"
+                                    >
+                                        Accept
+                                    </button>
+                                </form>
+
+                                <form
+                                    method="post"
+                                    action="{% url 'application-update-status' application.pk 'rejected' %}"
+                                >
+                                    {% csrf_token %}
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-danger"
+                                    >
+                                        Reject
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    {% endif %}
+                </article>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    This project has not received any applications.
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

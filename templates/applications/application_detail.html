@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Application | CreativeConnect
+{% endblock %}
+
+{% block content %}
+<section class="container py-5">
+    <article class="card border-0 shadow-sm">
+        <div class="card-body p-4 p-md-5">
+            <span
+                class="badge
+                {% if application.status == 'accepted' %}
+                    text-bg-success
+                {% elif application.status == 'rejected' %}
+                    text-bg-danger
+                {% else %}
+                    text-bg-warning
+                {% endif %}"
+            >
+                {{ application.get_status_display }}
+            </span>
+
+            <h1 class="h2 mt-3">
+                Application for {{ application.project.title }}
+            </h1>
+
+            <p class="text-secondary">
+                Submitted by {{ application.applicant.username }}
+                on {{ application.created_at|date:"j F Y" }}
+            </p>
+
+            <h2 class="h4 mt-4">
+                Application message
+            </h2>
+
+            <div>
+                {{ application.cover_letter|linebreaks }}
+            </div>
+
+            <a
+                href="{% url 'project-detail' application.project.pk %}"
+                class="btn btn-outline-primary mt-3"
+            >
+                View project
+            </a>
+
+            {% if user == application.applicant %}
+                <a
+                    href="{% url 'application-withdraw' application.pk %}"
+                    class="btn btn-outline-danger mt-3"
+                >
+                    Withdraw application
+                </a>
+            {% endif %}
+        </div>
+    </article>
+</section>
+{% endblock %}

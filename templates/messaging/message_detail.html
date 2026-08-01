@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ message_object.subject }} | CreativeConnect
+{% endblock %}
+
+{% block content %}
+<section class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <article class="card border-0 shadow-sm">
+                <div class="card-body p-4 p-md-5">
+                    <h1 class="h2">
+                        {{ message_object.subject }}
+                    </h1>
+
+                    <dl class="row mt-4">
+                        <dt class="col-sm-3">
+                            From
+                        </dt>
+
+                        <dd class="col-sm-9">
+                            {{ message_object.sender.username }}
+                        </dd>
+
+                        <dt class="col-sm-3">
+                            To
+                        </dt>
+
+                        <dd class="col-sm-9">
+                            {{ message_object.receiver.username }}
+                        </dd>
+
+                        <dt class="col-sm-3">
+                            Sent
+                        </dt>
+
+                        <dd class="col-sm-9">
+                            {{ message_object.created_at|date:"j F Y, H:i" }}
+                        </dd>
+                    </dl>
+
+                    <hr>
+
+                    <div class="mt-4">
+                        {{ message_object.content|linebreaks }}
+                    </div>
+
+                    <div class="d-flex flex-wrap gap-2 mt-4">
+                        <a
+                            href="{% url 'message-reply' message_object.pk %}"
+                            class="btn btn-primary"
+                        >
+                            Reply
+                        </a>
+
+                        {% if user == message_object.sender %}
+                            <a
+                                href="{% url 'conversation' message_object.receiver.username %}"
+                                class="btn btn-outline-primary"
+                            >
+                                View conversation
+                            </a>
+                        {% else %}
+                            <a
+                                href="{% url 'conversation' message_object.sender.username %}"
+                                class="btn btn-outline-primary"
+                            >
+                                View conversation
+                            </a>
+                        {% endif %}
+
+                        <a
+                            href="{% url 'inbox' %}"
+                            class="btn btn-outline-secondary"
+                        >
+                            Back to inbox
+                        </a>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
+{% endblock %}

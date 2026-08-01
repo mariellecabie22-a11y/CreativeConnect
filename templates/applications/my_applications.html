@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}
+    My Applications | CreativeConnect
+{% endblock %}
+
+{% block content %}
+<section class="container py-5">
+    <h1 class="fw-bold">
+        My applications
+    </h1>
+
+    <p class="text-secondary mb-4">
+        Track projects you have applied to.
+    </p>
+
+    <div class="row g-4">
+        {% for application in applications %}
+            <div class="col-md-6">
+                <article class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <span
+                            class="badge
+                            {% if application.status == 'accepted' %}
+                                text-bg-success
+                            {% elif application.status == 'rejected' %}
+                                text-bg-danger
+                            {% else %}
+                                text-bg-warning
+                            {% endif %}"
+                        >
+                            {{ application.get_status_display }}
+                        </span>
+
+                        <h2 class="h4 mt-3">
+                            {{ application.project.title }}
+                        </h2>
+
+                        <p class="text-secondary">
+                            Owner:
+                            {{ application.project.owner.username }}
+                        </p>
+
+                        <p>
+                            {{ application.cover_letter|truncatewords:25 }}
+                        </p>
+                    </div>
+
+                    <div class="card-footer bg-white border-0 pb-4">
+                        <a
+                            href="{% url 'application-detail' application.pk %}"
+                            class="btn btn-outline-primary"
+                        >
+                            View application
+                        </a>
+                    </div>
+                </article>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    You have not submitted any applications yet.
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
