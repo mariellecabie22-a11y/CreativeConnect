@@ -101,15 +101,6 @@
             id="mainNavigation"
         >
             <ul class="navbar-nav pt-3">
-                <li class="nav-item">
-                    <a
-                        class="nav-link"
-                        href="{% url 'profile-list' %}"
-                    >
-                        Browse creatives
-                    </a>
-                </li>
-
                 {% if user.is_authenticated %}
                     <li class="nav-item">
                         {% if user.creative_profile %}
@@ -129,6 +120,15 @@
                         {% endif %}
                     </li>
                 {% endif %}
+
+                        <li class="nav-item">
+                            <a
+                                class="nav-link"
+                                href="{% url 'profile-list' %}"
+                            >
+                                Browse creatives
+                            </a>
+                        </li>
 
                 <li class="nav-item">
                     <a
