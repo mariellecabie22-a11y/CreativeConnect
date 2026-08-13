@@ -13,6 +13,7 @@ The deployed application can be accessed here:
 ## Features
 
 - User registration and authentication
+- Reset a forgotten password through email
 - Custom user model
 - Creative user profiles
 - Browse creative professionals
